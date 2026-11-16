@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kfes Defender - Free Antivirus</title>
+    <style>
+        :root {
+            --bg-color: #05070a;
+            --card-bg: rgba(20, 24, 31, 0.7);
+            --text-color: #b0b8c4;
+            --heading-color: #ffffff;
+            --accent-color: #2ecc71;
+            --accent-glow: rgba(46, 204, 113, 0.5);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --warning-color: #f39c12;
+            --warning-bg: rgba(243, 156, 18, 0.1);
+            --badge-color: #e74c3c;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .bg-shapes {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; overflow: hidden; pointer-events: none;
+        }
+        .shape {
+            position: absolute; border-radius: 50%; filter: blur(100px);
+            opacity: 0.15; animation: float 20s infinite ease-in-out alternate;
+        }
+        .shape-1 { width: 600px; height: 600px; background: var(--accent-color); top: -200px; left: -200px; }
+        .shape-2 { width: 500px; height: 500px; background: #1abc9c; bottom: -150px; right: -150px; animation-delay: -5s; }
+        .shape-3 { width: 400px; height: 400px; background: #27ae60; top: 40%; left: 50%; transform: translate(-50%, -50%); animation-delay: -10s; }
+        @keyframes float { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(50px,50px) scale(1.1); } }
+
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 50px; background: rgba(10, 12, 16, 0.6);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .logo-container { display: flex; align-items: center; gap: 15px; }
+        .logo-svg { width: 45px; height: 45px; filter: drop-shadow(0 0 10px var(--accent-glow)); transition: transform 0.4s; }
+        .logo-container:hover .logo-svg { transform: scale(1.1) rotate(-10deg); }
+        .logo-text { font-size: 24px; font-weight: 800; color: var(--heading-color); }
+        .logo-text span { color: var(--accent-color); text-shadow: 0 0 15px var(--accent-glow); }
+
+        .header-right { display: flex; align-items: center; gap: 20px; }
+
+        .source-link {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(20, 24, 31, 0.8); color: var(--text-color);
+            text-decoration: none; padding: 10px 16px; border-radius: 10px;
+            border: 1px solid var(--border-color); font-size: 14px; font-weight: 500;
+            transition: all 0.3s ease; white-space: nowrap;
+        }
+        .source-link svg { width: 18px; height: 18px; fill: currentColor; }
+        .source-link:hover { border-color: var(--accent-color); color: var(--accent-color); box-shadow: 0 0 15px rgba(46, 204, 113, 0.2); }
+
+        .lang-selector select {
+            background: rgba(20, 24, 31, 0.8); color: var(--text-color);
+            border: 1px solid var(--border-color); padding: 10px 16px;
+            border-radius: 10px; cursor: pointer; outline: none; font-size: 14px; font-weight: 500;
+        }
+        .lang-selector select:hover { border-color: var(--accent-color); }
+
+        main { flex: 1; max-width: 1100px; margin: 0 auto; padding: 70px 20px; text-align: center; width: 100%; }
+        h1 {
+            font-size: 4rem; font-weight: 900; margin-bottom: 15px;
+            background: linear-gradient(135deg, #fff 0%, #a0a6b1 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .subtitle { font-size: 1.4rem; color: var(--accent-color); margin-bottom: 8px; font-weight: 600; text-shadow: 0 0 25px var(--accent-glow); }
+        .os-support {
+            font-size: 1rem; color: #8b949e; margin-bottom: 60px;
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 8px 20px; background: rgba(255,255,255,0.03);
+            border-radius: 30px; border: 1px solid var(--border-color);
+        }
+        .os-support::before { content: '💻'; font-size: 1.1rem; }
+
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 80px;
+            justify-content: center;
+        }
+
+        .download-card {
+            background: var(--card-bg); backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color); border-radius: 24px;
+            padding: 50px 40px; width: 100%;
+            display: flex; flex-direction: column; align-items: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+        .download-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent); opacity: 0.5;
+        }
+        .download-card:hover { transform: translateY(-10px); border-color: rgba(46,204,113,0.4); box-shadow: 0 30px 60px rgba(0,0,0,0.5), 0 0 40px rgba(46,204,113,0.15); }
+
+        .card-badge {
+            background: var(--badge-color);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            box-shadow: 0 0 15px rgba(231, 76, 60, 0.4);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+        }
+
+        .card-title { font-size: 1.6rem; font-weight: 800; margin-bottom: 5px; color: var(--heading-color); }
+        .card-version { font-size: 1rem; color: var(--accent-color); font-weight: 700; margin-bottom: 15px; }
+        .card-req { font-size: 1rem; color: #8b949e; margin-bottom: 35px; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+        .req-warning {
+            color: var(--warning-color); font-weight: 600; display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(243,156,18,0.1); padding: 6px 14px; border-radius: 20px;
+            border: 1px solid rgba(243,156,18,0.2); font-size: 0.9rem;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #2ecc71 0%, #1abc9c 100%);
+            color: #05070a; text-decoration: none; padding: 18px 40px;
+            border-radius: 14px; font-weight: 800; font-size: 1.1rem;
+            transition: all 0.3s; width: 100%; cursor: pointer; border: none;
+            text-transform: uppercase; letter-spacing: 1px;
+            box-shadow: 0 8px 25px rgba(46,204,113,0.3);
+        }
+        .btn:hover { transform: scale(1.03); box-shadow: 0 12px 35px rgba(46,204,113,0.5); }
+        .btn:active { transform: scale(0.98); }
+
+        .info-section {
+            text-align: left; background: var(--card-bg); backdrop-filter: blur(20px);
+            padding: 50px; border-radius: 24px; border: 1px solid var(--border-color);
+            margin-bottom: 40px; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+        .info-section::before {
+            content: ''; position: absolute; left: 0; top: 30px; bottom: 30px; width: 4px;
+            background: linear-gradient(to bottom, var(--accent-color), transparent); border-radius: 0 4px 4px 0;
+        }
+        .info-section h2 { color: var(--heading-color); font-size: 2rem; margin-bottom: 30px; font-weight: 800; }
+        .info-section h3 { color: var(--heading-color); margin-top: 35px; margin-bottom: 15px; font-size: 1.3rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+        .info-section h3::before { content: '>'; color: var(--accent-color); font-family: monospace; font-weight: 900; }
+        .info-section p { color: #a0a6b1; margin-bottom: 15px; font-size: 1.05rem; }
+
+        /* Стиль для списка шагов */
+        .steps-list {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 20px;
+            counter-reset: step-counter;
+        }
+        .steps-list li {
+            position: relative;
+            padding-left: 45px;
+            margin-bottom: 15px;
+            color: #a0a6b1;
+            font-size: 1.05rem;
+            counter-increment: step-counter;
+        }
+        .steps-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 2px;
+            width: 28px;
+            height: 28px;
+            background: rgba(46, 204, 113, 0.15);
+            color: var(--accent-color);
+            border: 1px solid rgba(46, 204, 113, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.85rem;
+        }
+
+        .filename {
+            background-color: rgba(0,0,0,0.4); color: var(--accent-color);
+            padding: 3px 10px; border-radius: 6px; font-family: monospace;
+            font-size: 0.9em; border: 1px solid rgba(46,204,113,0.2); font-weight: 600;
+        }
+
+        .warning-box {
+            background: var(--warning-bg); border: 1px solid rgba(243,156,18,0.3);
+            padding: 25px; border-radius: 16px; margin-top: 20px; color: #f5cba7;
+            display: flex; gap: 20px; align-items: flex-start;
+        }
+        .warning-box::before { content: '⚠'; font-size: 1.8rem; color: var(--warning-color); line-height: 1; }
+
+        .info-box {
+            background: rgba(46, 204, 113, 0.05); border: 1px solid rgba(46, 204, 113, 0.2);
+            padding: 25px; border-radius: 16px; margin-top: 20px; color: #d1f2eb;
+            display: flex; gap: 20px; align-items: flex-start;
+        }
+        .info-box::before { content: 'ℹ'; font-size: 1.8rem; color: var(--accent-color); line-height: 1; }
+
+        footer {
+            text-align: center; padding: 40px; background: rgba(10,12,16,0.5);
+            color: #5a6270; font-size: 0.9rem; border-top: 1px solid var(--border-color);
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 15px; padding: 15px 20px; }
+            .header-right { flex-direction: column; width: 100%; }
+            .source-link, .lang-selector select { width: 100%; justify-content: center; text-align: center; }
+            h1 { font-size: 2.8rem; }
+            .info-section { padding: 30px; }
+            .download-grid { grid-template-columns: 1fr; }
+            .warning-box, .info-box { flex-direction: column; gap: 10px; }
+            .warning-box::before, .info-box::before { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+
+    <header>
+        <div class="logo-container">
+            <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M50 5 L95 25 L95 60 C95 80 50 95 50 95 C50 95 5 80 5 60 L5 25 Z" fill="#2ecc71" />
+                <path d="M35 30 L35 70 L45 70 L45 55 L60 70 L75 70 L52 48 L73 30 L58 30 L45 45 L45 30 Z" fill="#05070a" />
+            </svg>
+            <span class="logo-text">Kfes <span>Defender</span></span>
+        </div>
+        <div class="header-right">
+            <a href="https://github.com/brrbrrpatapimlalala/kfes-defender" target="_blank" rel="noopener noreferrer" class="source-link">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                <span data-i18n="source_link">Main Project Source</span>
+            </a>
+            <div class="lang-selector">
+                <select id="langSwitcher" onchange="changeLanguage()">
+                    <option value="en">🇬🇧 English</option>
+                    <option value="ru">🇷🇺 Русский</option>
+                    <option value="uk">🇺🇦 Українська</option>
+                    <option value="de">🇩🇪 Deutsch</option>
+                    <option value="kk">🇰🇿 Қазақша</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <h1>Kfes Defender</h1>
+        <div class="subtitle" data-i18n="free">100% Free Antivirus</div>
+        <div class="subtitle" data-i18n="secure">Guaranteed 100% Secure</div>
+        <div class="os-support" data-i18n="os">Supported OS: Windows 10/11 (64-bit)</div>
+
+        <div class="download-grid">
+            <!-- Карточка 1: Installer -->
+            <div class="download-card">
+                <div class="card-title">Kfes Defender Installer</div>
+                <div class="card-req">
+                    <span data-i18n="req_python">Requires Python (Recommended v3.13)</span>
+                    <span class="req-warning" data-i18n="req_internet">Requires Internet Connection</span>
+                </div>
+                <a href="#" class="btn" onclick="alert('Download started: Kfes Defender 1.4.0 Installer.exe')" data-i18n="btn_download">Download</a>
+            </div>
+
+            <!-- Карточка 2: KDUI Image Update -->
+            <div class="download-card">
+                <div class="card-badge" data-i18n="badge_latest">Latest Version</div>
+                <div class="card-title">KDUI Image Update</div>
+                <div class="card-version">v1.4.1</div>
+                <div class="card-req">
+                    <span data-i18n="req_update">Update package for Kfes Defender</span>
+                </div>
+                <a href="#" class="btn" onclick="alert('Download started: KDUI Image Update v1.4.1')" data-i18n="btn_download_update">Download Update</a>
+            </div>
+        </div>
+
+        <!-- Информация об антивирусе -->
+        <div class="info-section">
+            <h2 data-i18n="info_title">About Kfes Defender</h2>
+            
+            <h3 data-i18n="info_installer_title">Kfes Defender Installer</h3>
+            <p data-i18n="info_installer_text">The Installer uses PyInstaller for building. However, it installs even if you don't have PyInstaller downloaded. It automatically assembles the necessary components embedded in the installer. The installer includes 2 programs at once: <b>Kfes Defender</b> and <b>KDUI Compiler</b>.</p>
+            <p data-i18n="info_pip_text">During installation, it uses the <b>pip</b> package manager, which is already built into Python, to download and install the necessary components.</p>
+
+            <h3 data-i18n="info_update_title">Update to v1.4.1</h3>
+            <p data-i18n="info_update_text">Version 1.4.1 is the latest version. If you encounter an error after updating, don't panic. This error simply means the antivirus process could not be restarted automatically. Just launch the antivirus manually to see the updated version.</p>
+            
+            <p data-i18n="info_security_text"><b>Security update:</b> Added security for <b>.kdui</b> files. They are now scanned when opening a <b>.kdui</b> file in the antivirus updates tab.</p>
+
+            <!-- Инструкция по установке обновления -->
+            <p data-i18n="info_how_to_install" style="margin-top: 20px;"><b>How to install the update:</b></p>
+            <ol class="steps-list" data-i18n="info_steps_list">
+                <li>Open the antivirus and go to <b>Settings</b>.</li>
+                <li>At the very bottom, select the <b>About & Updates</b> tab.</li>
+                <li>In the bottom right corner, you will see the <b>Open File</b> button. Click it.</li>
+                <li>Select the <b>.kdui</b> file to update the program.</li>
+                <li>Then click <b>Install and Restart</b>.</li>
+            </ol>
+
+            <div class="info-box">
+                <div data-i18n="info_update_revert">If something is wrong with the antivirus, click "Return to built-in version" in the "About & Updates" tab.</div>
+            </div>
+
+            <h3 data-i18n="info_antivirus_title">Kfes Defender (Antivirus)</h3>
+            <p data-i18n="info_antivirus_text">The main antivirus program designed to protect your system.</p>
+            <div class="warning-box">
+                <div data-i18n="info_antivirus_warning"><b>Important Note:</b> Due to the early versions of the program, the antivirus may work incorrectly or have bugs. We are actively working on improvements.</div>
+            </div>
+
+            <h3 data-i18n="info_kdui_title">KDUI Compiler</h3>
+            <p data-i18n="info_kdui_text">This program uses a simple Tkinter interface. It uses <span class="filename">index.html</span> and <span class="filename">main.py</span> from a ZIP archive and compiles everything into a <b>.kdui</b> format (Kfes Defender Update Image).</p>
+        </div>
+    </main>
+
+    <footer>
+        &copy; 2023 Kfes Defender. <span data-i18n="footer_text">All rights reserved.</span>
+    </footer>
+
+    <script>
+        const translations = {
+            en: {
+                source_link: "Main Project Source",
+                free: "100% Free Antivirus",
+                secure: "Guaranteed 100% Secure",
+                os: "Supported OS: Windows 10/11 (64-bit)",
+                req_python: "Requires Python (Recommended v3.13)",
+                req_internet: "Requires Internet Connection",
+                req_update: "Update package for Kfes Defender",
+                btn_download: "Download",
+                btn_download_update: "Download Update",
+                badge_latest: "Latest Version",
+                info_title: "About Kfes Defender",
+                info_installer_title: "Kfes Defender Installer",
+                info_installer_text: "The Installer uses PyInstaller for building. However, it installs even if you don't have PyInstaller downloaded. It automatically assembles the necessary components embedded in the installer. The installer includes 2 programs at once: <b>Kfes Defender</b> and <b>KDUI Compiler</b>.",
+                info_pip_text: "During installation, it uses the <b>pip</b> package manager, which is already built into Python, to download and install the necessary components.",
+                info_update_title: "Update to v1.4.1",
+                info_update_text: "Version 1.4.1 is the latest version. If you encounter an error after updating, don't panic. This error simply means the antivirus process could not be restarted automatically. Just launch the antivirus manually to see the updated version.",
+                info_security_text: "<b>Security update:</b> Added security for <b>.kdui</b> files. They are now scanned when opening a <b>.kdui</b> file in the antivirus updates tab.",
+                info_how_to_install: "<b>How to install the update:</b>",
+                info_steps_list: "<li>Open the antivirus and go to <b>Settings</b>.</li><li>At the very bottom, select the <b>About & Updates</b> tab.</li><li>In the bottom right corner, you will see the <b>Open File</b> button. Click it.</li><li>Select the <b>.kdui</b> file to update the program.</li><li>Then click <b>Install and Restart</b>.</li>",
+                info_update_revert: "If something is wrong with the antivirus, click \"Return to built-in version\" in the \"About & Updates\" tab.",
+                info_antivirus_title: "Kfes Defender (Antivirus)",
+                info_antivirus_text: "The main antivirus program designed to protect your system.",
+                info_antivirus_warning: "<b>Important Note:</b> Due to the early versions of the program, the antivirus may work incorrectly or have bugs. We are actively working on improvements.",
+                info_kdui_title: "KDUI Compiler",
+                info_kdui_text: "This program uses a simple Tkinter interface. It uses <span class=\"filename\">index.html</span> and <span class=\"filename\">main.py</span> from a ZIP archive and compiles everything into a <b>.kdui</b> format (Kfes Defender Update Image).",
+                footer_text: "All rights reserved."
+            },
+            ru: {
+                source_link: "Основной источник проекта",
+                free: "Абсолютно бесплатный антивирус",
+                secure: "Гарантировано 100% безопасный",
+                os: "Поддерживается: Windows 10/11 (64-бит)",
+                req_python: "Требуется Python (рекомендуется v3.13)",
+                req_internet: "Требуется подключение к интернету",
+                req_update: "Пакет обновления для Kfes Defender",
+                btn_download: "Скачать",
+                btn_download_update: "Скачать обновление",
+                badge_latest: "Последняя версия",
+                info_title: "О Kfes Defender",
+                info_installer_title: "Kfes Defender Installer",
+                info_installer_text: "Установщик использует PyInstaller для сборки, но устанавливается, даже если у вас не скачан PyInstaller. Он сам собирает нужные компоненты, встроенные в установщик. В установщик входит сразу 2 программы: <b>Kfes Defender</b> и <b>KDUI Compiler</b>.",
+                info_pip_text: "Во время установки он использует менеджер пакетов <b>pip</b>, который уже встроен в Python, для загрузки и установки необходимых компонентов.",
+                info_update_title: "Обновление до v1.4.1",
+                info_update_text: "Версия 1.4.1 — это последняя версия. Если после обновления у вас появилась ошибка, не паникуйте. Эта ошибка просто означает, что процесс антивируса не может переоткрыться автоматически. Запустите антивирус самостоятельно, чтобы увидеть обновленную версию.",
+                info_security_text: "<b>Обновление безопасности:</b> Добавлена безопасность <b>.kdui</b> файлов. Теперь они проверяются при открытии <b>.kdui</b> файла во вкладке обновления антивируса.",
+                info_how_to_install: "<b>Как установить обновление:</b>",
+                info_steps_list: "<li>Зайдите в антивирус и откройте <b>Настройки</b>.</li><li>В самом низу выберите вкладку <b>О программе и обновления</b>.</li><li>В нижнем правом углу вы увидите кнопку <b>Открыть файл</b>. Нажмите на неё.</li><li>Выберите файл <b>.kdui</b> для обновления программы.</li><li>Затем нажмите <b>Установить и перезапустить</b>.</li>",
+                info_update_revert: "Если у вас что-то не так с антивирусом, нажмите \"Вернуться к встроенной версии\" во вкладке \"О программе и обновления\".",
+                info_antivirus_title: "Kfes Defender (Антивирус)",
+                info_antivirus_text: "Основная программа-антивирус, предназначенная для защиты вашей системы.",
+                info_antivirus_warning: "<b>Важное примечание:</b> Из-за ранних версий программы антивирус может работать некорректно или иметь ошибки. Мы активно работаем над улучшениями.",
+                info_kdui_title: "KDUI Compiler",
+                info_kdui_text: "Программа использует простой интерфейс Tkinter. Она использует <span class=\"filename\">index.html</span> и <span class=\"filename\">main.py</span> из ZIP архива, а также компилирует все это в формат <b>.kdui</b> (Kfes Defender Update Image).",
+                footer_text: "Все права защищены."
+            },
+            uk: {
+                source_link: "Основне джерело проєкту",
+                free: "Абсолютно безкоштовний антивірус",
+                secure: "Гарантовано 100% безпечний",
+                os: "Підтримується: Windows 10/11 (64-біт)",
+                req_python: "Потрібен Python (рекомендовано v3.13)",
+                req_internet: "Потрібне підключення до інтернету",
+                req_update: "Пакет оновлення для Kfes Defender",
+                btn_download: "Завантажити",
+                btn_download_update: "Завантажити оновлення",
+                badge_latest: "Остання версія",
+                info_title: "Про Kfes Defender",
+                info_installer_title: "Kfes Defender Installer",
+                info_installer_text: "Інсталятор використовує PyInstaller для збірки, але встановлюється, навіть якщо у вас не завантажено PyInstaller. Він сам збирає потрібні компоненти, вбудовані в інсталятор. До інсталятора входить одразу 2 програми: <b>Kfes Defender</b> та <b>KDUI Compiler</b>.",
+                info_pip_text: "Під час встановлення він використовує менеджер пакетів <b>pip</b>, який вже вбудований у Python, для завантаження та встановлення необхідних компонентів.",
+                info_update_title: "Оновлення до v1.4.1",
+                info_update_text: "Версія 1.4.1 — це остання версія. Якщо після оновлення у вас з'явилася помилка, не панікуйте. Ця помилка просто означає, що процес антивірусу не може перевідкритися автоматично. Запустіть антивірус самостійно, щоб побачити оновлену версію.",
+                info_security_text: "<b>Оновлення безпеки:</b> Додано безпеку <b>.kdui</b> файлів. Тепер вони перевіряються при відкритті <b>.kdui</b> файлу у вкладці оновлення антивірусу.",
+                info_how_to_install: "<b>Як встановити оновлення:</b>",
+                info_steps_list: "<li>Зайдіть в антивірус і відкрийте <b>Налаштування</b>.</li><li>В самому низу виберіть вкладку <b>Про програму та оновлення</b>.</li><li>У нижньому правому куті ви побачите кнопку <b>Відкрити файл</b>. Натисніть на неї.</li><li>Виберіть файл <b>.kdui</b> для оновлення програми.</li><li>Потім натисніть <b>Встановити та перезапустити</b>.</li>",
+                info_update_revert: "Якщо у вас щось не так з антивірусом, натисніть \"Повернутися до вбудованої версії\" у вкладці \"Про програму та оновлення\".",
+                info_antivirus_title: "Kfes Defender (Антивірус)",
+                info_antivirus_text: "Основна програма-антивірус, призначена для захисту вашої системи.",
+                info_antivirus_warning: "<b>Важлива примітка:</b> Через ранні версії програми антивірус може працювати некоректно або мати помилки. Ми активно працюємо над покращеннями.",
+                info_kdui_title: "KDUI Compiler",
+                info_kdui_text: "Програма використовує простий інтерфейс Tkinter. Вона використовує <span class=\"filename\">index.html</span> та <span class=\"filename\">main.py</span> з ZIP архіву, а також компілює все це у формат <b>.kdui</b> (Kfes Defender Update Image).",
+                footer_text: "Усі права захищені."
+            },
+            de: {
+                source_link: "Hauptprojektquelle",
+                free: "100% Kostenloser Antivirus",
+                secure: "Garantiert 100% Sicher",
+                os: "Unterstützt: Windows 10/11 (64-Bit)",
+                req_python: "Benötigt Python (Empfohlen v3.13)",
+                req_internet: "Internetverbindung erforderlich",
+                req_update: "Update-Paket für Kfes Defender",
+                btn_download: "Herunterladen",
+                btn_download_update: "Update herunterladen",
+                badge_latest: "Neueste Version",
+                info_title: "Über Kfes Defender",
+                info_installer_title: "Kfes Defender Installer",
+                info_installer_text: "Der Installer verwendet PyInstaller zum Erstellen. Er installiert jedoch auch, wenn PyInstaller nicht heruntergeladen wurde. Er stellt die erforderlichen Komponenten automatisch zusammen. Der Installer enthält 2 Programme: <b>Kfes Defender</b> und <b>KDUI Compiler</b>.",
+                info_pip_text: "Während der Installation verwendet er den Paketmanager <b>pip</b>, der bereits in Python integriert ist, um die erforderlichen Komponenten herunterzuladen und zu installieren.",
+                info_update_title: "Update auf v1.4.1",
+                info_update_text: "Version 1.4.1 ist die neueste Version. Wenn nach dem Update ein Fehler auftritt, geraten Sie nicht in Panik. Dieser Fehler bedeutet lediglich, dass der Antivirenprozess nicht automatisch neu gestartet werden konnte. Starten Sie das Antivirenprogramm einfach manuell, um die aktualisierte Version zu sehen.",
+                info_security_text: "<b>Sicherheitsupdate:</b> Sicherheit für <b>.kdui</b>-Dateien hinzugefügt. Sie werden jetzt beim Öffnen einer <b>.kdui</b>-Datei im Antivirus-Update-Tab überprüft.",
+                info_how_to_install: "<b>So installieren Sie das Update:</b>",
+                info_steps_list: "<li>Öffnen Sie das Antivirenprogramm und gehen Sie zu <b>Einstellungen</b>.</li><li>Wählen Sie ganz unten die Registerkarte <b>Über & Updates</b>.</li><li>In der unteren rechten Ecke sehen Sie die Schaltfläche <b>Datei öffnen</b>. Klicken Sie darauf.</li><li>Wählen Sie die <b>.kdui</b>-Datei aus, um das Programm zu aktualisieren.</li><li>Klicken Sie dann auf <b>Installieren und neu starten</b>.</li>",
+                info_update_revert: "Wenn mit dem Antivirenprogramm etwas nicht stimmt, klicken Sie auf \"Zur integrierten Version zurückkehren\" in der Registerkarte \"Über & Updates\".",
+                info_antivirus_title: "Kfes Defender (Antivirus)",
+                info_antivirus_text: "Das Haupt-Antivirenprogramm zum Schutz Ihres Systems.",
+                info_antivirus_warning: "<b>Wichtiger Hinweis:</b> Aufgrund der frühen Versionen des Programms kann das Antivirenprogramm fehlerhaft arbeiten oder Fehler aufweisen. Wir arbeiten aktiv an Verbesserungen.",
+                info_kdui_title: "KDUI Compiler",
+                info_kdui_text: "Dieses Programm verwendet eine einfache Tkinter-Oberfläche. Es verwendet <span class=\"filename\">index.html</span> und <span class=\"filename\">main.py</span> aus einem ZIP-Archiv und kompiliert alles in das <b>.kdui</b>-Format (Kfes Defender Update Image).",
+                footer_text: "Alle Rechte vorbehalten."
+            },
+            kk: {
+                source_link: "Жобаның негізгі көзі",
+                free: "100% Тегін антивирус",
+                secure: "100% Қауіпсіздікке кепілдік",
+                os: "Қолдау көрсетіледі: Windows 10/11 (64-бит)",
+                req_python: "Python қажет (v3.13 ұсынылады)",
+                req_internet: "Интернет қосылымы қажет",
+                req_update: "Kfes Defender үшін жаңарту пакеті",
+                btn_download: "Жүктеу",
+                btn_download_update: "Жаңартуды жүктеу",
+                badge_latest: "Соңғы нұсқа",
+                info_title: "Kfes Defender туралы",
+                info_installer_title: "Kfes Defender Installer",
+                info_installer_text: "Орнатушы жинақтау үшін PyInstaller пайдаланады, бірақ PyInstaller жүктелмеген болса да орнатады. Ол орнатушыға кіріктірілген қажетті компоненттерді өзі жинайды. Орнатушыға бірден 2 бағдарлама кіреді: <b>Kfes Defender</b> және <b>KDUI Compiler</b>.",
+                info_pip_text: "Орнату кезінде ол Python-ға кіріктірілген <b>pip</b> пакет менеджерін қажетті компоненттерді жүктеу және орнату үшін пайдаланады.",
+                info_update_title: "v1.4.1 нұсқасына жаңарту",
+                info_update_text: "1.4.1 нұсқасы — бұл соңғы нұсқа. Жаңартқаннан кейін қате пайда болса, үрейленбеңіз. Бұл қате антивирус процесінің автоматты түрде қайта ашылмағанын білдіреді. Жаңартылған нұсқаны көру үшін антивирусты өзіңіз қосыңыз.",
+                info_security_text: "<b>Қауіпсіздік жаңартуы:</b> <b>.kdui</b> файлдарының қауіпсіздігі қосылды. Енді олар антивирусты жаңарту қойындысында <b>.kdui</b> файлын ашқан кезде тексеріледі.",
+                info_how_to_install: "<b>Жаңартуды қалай орнатуға болады:</b>",
+                info_steps_list: "<li>Антивирусты ашып, <b>Параметрлер</b> бөліміне өтіңіз.</li><li>Ең төменде <b>Бағдарлама және жаңартулар туралы</b> қойындысын таңдаңыз.</li><li>Төменгі оң жақ бұрышта <b>Файлды ашу</b> түймесін көресіз. Оны басыңыз.</li><li>Бағдарламаны жаңарту үшін <b>.kdui</b> файлын таңдаңыз.</li><li>Содан кейін <b>Орнату және қайта іске қосу</b> түймесін басыңыз.</li>",
+                info_update_revert: "Егер антивируспен бірдеңе дұрыс болмаса, \"Бағдарлама және жаңартулар туралы\" қойындысындағы \"Кіріктірілген нұсқаға оралу\" түймесін басыңыз.",
+                info_antivirus_title: "Kfes Defender (Антивирус)",
+                info_antivirus_text: "Жүйеңізді қорғауға арналған негізгі антивирустық бағдарлама.",
+                info_antivirus_warning: "<b>Маңызды ескерту:</b> Бағдарламаның алғашқы нұсқаларына байланысты антивирус дұрыс жұмыс істемеуі немесе қателер болуы мүмкін. Біз жақсартулар бойынша белсенді жұмыс істеп жатырмыз.",
+                info_kdui_title: "KDUI Compiler",
+                info_kdui_text: "Бағдарлама қарапайым Tkinter интерфейсін пайдаланады. Ол ZIP мұрағатындағы <span class=\"filename\">index.html</span> және <span class=\"filename\">main.py</span> файлдарын пайдаланып, барлығын <b>.kdui</b> форматына (Kfes Defender Update Image) компиляциялайды.",
+                footer_text: "Барлық құқықтар қорғалған."
+            }
+        };
+
+        function changeLanguage() {
+            const lang = document.getElementById('langSwitcher').value;
+            const elements = document.querySelectorAll('[data-i18n]');
+            
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            changeLanguage();
+        });
+    </script>
+</body>
+</html>
