@@ -140,6 +140,18 @@
             background: rgba(243,156,18,0.1); padding: 6px 14px; border-radius: 20px;
             border: 1px solid rgba(243,156,18,0.2); font-size: 0.9rem;
         }
+        .prev-versions-link {
+            font-size: 0.85rem;
+            color: #8b949e;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+        .prev-versions-link a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .prev-versions-link a:hover { text-decoration: underline; }
 
         .btn {
             background: linear-gradient(135deg, #2ecc71 0%, #1abc9c 100%);
@@ -219,6 +231,73 @@
         }
         .info-box::before { content: 'ℹ'; font-size: 1.8rem; color: var(--accent-color); line-height: 1; }
 
+        /* Changelog Styles */
+        .changelog-section {
+            text-align: left;
+            background: var(--card-bg); backdrop-filter: blur(20px);
+            padding: 50px; border-radius: 24px; border: 1px solid var(--border-color);
+            margin-bottom: 40px; box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+        .changelog-section h2 {
+            color: var(--heading-color); font-size: 2rem; margin-bottom: 30px; font-weight: 800;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .changelog-section h2::before {
+            content: '📜'; font-size: 1.8rem;
+        }
+        .changelog-entry {
+            border-left: 2px solid var(--border-color);
+            padding-left: 25px;
+            margin-bottom: 35px;
+            position: relative;
+        }
+        .changelog-entry:last-child { margin-bottom: 0; }
+        .changelog-entry::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 5px;
+            width: 10px;
+            height: 10px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+        .changelog-version {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .changelog-date {
+            font-size: 0.85rem;
+            color: #5a6270;
+            font-weight: 400;
+        }
+        .changelog-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .changelog-list li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 8px;
+            color: #a0a6b1;
+            font-size: 1rem;
+        }
+        .changelog-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+
         footer {
             text-align: center; padding: 40px; background: rgba(10,12,16,0.5);
             color: #5a6270; font-size: 0.9rem; border-top: 1px solid var(--border-color);
@@ -230,7 +309,7 @@
             .header-right { flex-direction: column; width: 100%; }
             .source-link, .lang-selector select { width: 100%; justify-content: center; text-align: center; }
             h1 { font-size: 2.8rem; }
-            .info-section { padding: 30px; }
+            .info-section, .changelog-section { padding: 30px; }
             .download-grid { grid-template-columns: 1fr; }
             .warning-box, .info-box { flex-direction: column; gap: 10px; }
             .warning-box::before, .info-box::before { display: none; }
@@ -293,11 +372,12 @@
             <div class="download-card">
                 <div class="card-badge" data-i18n="badge_latest">Latest Version</div>
                 <div class="card-title">KDUI Image Update</div>
-                <div class="card-version">v1.4.1</div>
+                <div class="card-version">v1.4.2</div>
                 <div class="card-req">
                     <span data-i18n="req_update">Update package for Kfes Defender</span>
                 </div>
-                <a href="https://github.com/brrbrrpatapimlalala/kfes-defender/raw/refs/heads/main/Kfes_Defender_1.4.1.kdui" class="btn" data-i18n="btn_download_update">Download Update</a>
+                <div class="prev-versions-link" data-i18n="prev_versions">Previous versions can be downloaded from the <a href="https://github.com/brrbrrpatapimlalala/kfes-defender" target="_blank" rel="noopener noreferrer">Main Project Source</a>.</div>
+                <a href="https://github.com/brrbrrpatapimlalala/kfes-defender/raw/refs/heads/main/Kfes_Defender_1.4.2.kdui" class="btn" data-i18n="btn_download_update">Download Update</a>
             </div>
         </div>
 
@@ -309,10 +389,8 @@
             <p data-i18n="info_installer_text">The Installer uses PyInstaller for building. However, it installs even if you don't have PyInstaller downloaded. It automatically assembles the necessary components embedded in the installer. The installer includes 2 programs at once: <b>Kfes Defender</b> and <b>KDUI Compiler</b>.</p>
             <p data-i18n="info_pip_text">During installation, it uses the <b>pip</b> package manager, which is already built into Python, to download and install the necessary components.</p>
 
-            <h3 data-i18n="info_update_title">Update to v1.4.1</h3>
-            <p data-i18n="info_update_text">Version 1.4.1 is the latest version. If you encounter an error after updating, don't panic. This error simply means the antivirus process could not be restarted automatically. Just launch the antivirus manually to see the updated version.</p>
-            
-            <p data-i18n="info_security_text"><b>Security update:</b> Added security for <b>.kdui</b> files. They are now scanned when opening a <b>.kdui</b> file in the antivirus updates tab.</p>
+            <h3 data-i18n="info_update_title">Update to v1.4.2</h3>
+            <p data-i18n="info_update_text">Version 1.4.2 is the latest version. If you encounter an error after updating, don't panic. This error simply means the antivirus process could not be restarted automatically. Just launch the antivirus manually to see the updated version.</p>
 
             <!-- Инструкция по установке обновления -->
             <p data-i18n="info_how_to_install" style="margin-top: 20px;"><b>How to install the update:</b></p>
@@ -337,6 +415,31 @@
             <h3 data-i18n="info_kdui_title">KDUI Compiler</h3>
             <p data-i18n="info_kdui_text">This program uses a simple Tkinter interface. It uses <span class="filename">index.html</span> and <span class="filename">main.py</span> from a ZIP archive and compiles everything into a <b>.kdui</b> format (Kfes Defender Update Image).</p>
         </div>
+
+        <!-- Changelog Section -->
+        <div class="changelog-section">
+            <h2 data-i18n="changelog_title">Changelog</h2>
+            
+            <!-- Version 1.4.2 -->
+            <div class="changelog-entry">
+                <div class="changelog-version">v1.4.2 <span class="changelog-date" data-i18n="latest">(Latest)</span></div>
+                <ul class="changelog-list">
+                    <li data-i18n="changelog_142_1">Added display of the update author in the <b>.kdui</b> code. You can change the author's name, and it will be shown when opening the update file in the antivirus.</li>
+                    <li data-i18n="changelog_142_2">Added the ability to manually add a file to the <b>Quarantine</b> tab (isolate it).</li>
+                    <li data-i18n="changelog_142_3">The "System Scan" tab has been renamed to <b>"Scan"</b>. A new <b>"Scan File"</b> button has been added, allowing you to select a specific file and scan only it.</li>
+                    <li data-i18n="changelog_142_4">When installing other versions from version 1.4.2, there will be no error opening the antivirus process.</li>
+                    <li data-i18n="changelog_142_5">File scanning has been improved. Disassembly of the file is now used for more accurate detection.</li>
+                </ul>
+            </div>
+
+            <!-- Version 1.4.1 -->
+            <div class="changelog-entry">
+                <div class="changelog-version">v1.4.1</div>
+                <ul class="changelog-list">
+                    <li data-i18n="changelog_141_1"><b>Security update:</b> Added security for <b>.kdui</b> files. They are now scanned when opening a <b>.kdui</b> file in the antivirus updates tab.</li>
+                </ul>
+            </div>
+        </div>
     </main>
 
     <footer>
@@ -353,6 +456,7 @@
                 req_python: "Requires Python (Recommended v3.13)",
                 req_internet: "Requires Internet Connection",
                 req_update: "Update package for Kfes Defender",
+                prev_versions: "Previous versions can be downloaded from the <a href=\"https://github.com/brrbrrpatapimlalala/kfes-defender\" target=\"_blank\" style=\"color: var(--accent-color); text-decoration: none; font-weight: 600;\">Main Project Source</a>.",
                 btn_download: "Download",
                 btn_download_update: "Download Update",
                 badge_latest: "Latest Version",
@@ -360,9 +464,8 @@
                 info_installer_title: "Kfes Defender Installer",
                 info_installer_text: "The Installer uses PyInstaller for building. However, it installs even if you don't have PyInstaller downloaded. It automatically assembles the necessary components embedded in the installer. The installer includes 2 programs at once: <b>Kfes Defender</b> and <b>KDUI Compiler</b>.",
                 info_pip_text: "During installation, it uses the <b>pip</b> package manager, which is already built into Python, to download and install the necessary components.",
-                info_update_title: "Update to v1.4.1",
-                info_update_text: "Version 1.4.1 is the latest version. If you encounter an error after updating, don't panic. This error simply means the antivirus process could not be restarted automatically. Just launch the antivirus manually to see the updated version.",
-                info_security_text: "<b>Security update:</b> Added security for <b>.kdui</b> files. They are now scanned when opening a <b>.kdui</b> file in the antivirus updates tab.",
+                info_update_title: "Update to v1.4.2",
+                info_update_text: "Version 1.4.2 is the latest version. If you encounter an error after updating, don't panic. This error simply means the antivirus process could not be restarted automatically. Just launch the antivirus manually to see the updated version.",
                 info_how_to_install: "<b>How to install the update:</b>",
                 info_steps_list: "<li>Open the antivirus and go to <b>Settings</b>.</li><li>At the very bottom, select the <b>About & Updates</b> tab.</li><li>In the bottom right corner, you will see the <b>Open File</b> button. Click it.</li><li>Select the <b>.kdui</b> file to update the program.</li><li>Then click <b>Install and Restart</b>.</li>",
                 info_update_revert: "If something is wrong with the antivirus, click \"Return to built-in version\" in the \"About & Updates\" tab.",
@@ -371,6 +474,14 @@
                 info_antivirus_warning: "<b>Important Note:</b> Due to the early versions of the program, the antivirus may work incorrectly or have bugs. We are actively working on improvements.",
                 info_kdui_title: "KDUI Compiler",
                 info_kdui_text: "This program uses a simple Tkinter interface. It uses <span class=\"filename\">index.html</span> and <span class=\"filename\">main.py</span> from a ZIP archive and compiles everything into a <b>.kdui</b> format (Kfes Defender Update Image).",
+                changelog_title: "Changelog",
+                latest: "(Latest)",
+                changelog_142_1: "Added display of the update author in the <b>.kdui</b> code. You can change the author's name, and it will be shown when opening the update file in the antivirus.",
+                changelog_142_2: "Added the ability to manually add a file to the <b>Quarantine</b> tab (isolate it).",
+                changelog_142_3: "The \"System Scan\" tab has been renamed to <b>\"Scan\"</b>. A new <b>\"Scan File\"</b> button has been added, allowing you to select a specific file and scan only it.",
+                changelog_142_4: "When installing other versions from version 1.4.2, there will be no error opening the antivirus process.",
+                changelog_142_5: "File scanning has been improved. Disassembly of the file is now used for more accurate detection.",
+                changelog_141_1: "<b>Security update:</b> Added security for <b>.kdui</b> files. They are now scanned when opening a <b>.kdui</b> file in the antivirus updates tab.",
                 footer_text: "All rights reserved."
             },
             ru: {
@@ -381,6 +492,7 @@
                 req_python: "Требуется Python (рекомендуется v3.13)",
                 req_internet: "Требуется подключение к интернету",
                 req_update: "Пакет обновления для Kfes Defender",
+                prev_versions: "Предыдущие версии можно скачать на <a href=\"https://github.com/brrbrrpatapimlalala/kfes-defender\" target=\"_blank\" style=\"color: var(--accent-color); text-decoration: none; font-weight: 600;\">основном источнике проекта</a>.",
                 btn_download: "Скачать",
                 btn_download_update: "Скачать обновление",
                 badge_latest: "Последняя версия",
@@ -388,9 +500,8 @@
                 info_installer_title: "Kfes Defender Installer",
                 info_installer_text: "Установщик использует PyInstaller для сборки, но устанавливается, даже если у вас не скачан PyInstaller. Он сам собирает нужные компоненты, встроенные в установщик. В установщик входит сразу 2 программы: <b>Kfes Defender</b> и <b>KDUI Compiler</b>.",
                 info_pip_text: "Во время установки он использует менеджер пакетов <b>pip</b>, который уже встроен в Python, для загрузки и установки необходимых компонентов.",
-                info_update_title: "Обновление до v1.4.1",
-                info_update_text: "Версия 1.4.1 — это последняя версия. Если после обновления у вас появилась ошибка, не паникуйте. Эта ошибка просто означает, что процесс антивируса не может переоткрыться автоматически. Запустите антивирус самостоятельно, чтобы увидеть обновленную версию.",
-                info_security_text: "<b>Обновление безопасности:</b> Добавлена безопасность <b>.kdui</b> файлов. Теперь они проверяются при открытии <b>.kdui</b> файла во вкладке обновления антивируса.",
+                info_update_title: "Обновление до v1.4.2",
+                info_update_text: "Версия 1.4.2 — это последняя версия. Если после обновления у вас появилась ошибка, не паникуйте. Эта ошибка просто означает, что процесс антивируса не может переоткрыться автоматически. Запустите антивирус самостоятельно, чтобы увидеть обновленную версию.",
                 info_how_to_install: "<b>Как установить обновление:</b>",
                 info_steps_list: "<li>Зайдите в антивирус и откройте <b>Настройки</b>.</li><li>В самом низу выберите вкладку <b>О программе и обновления</b>.</li><li>В нижнем правом углу вы увидите кнопку <b>Открыть файл</b>. Нажмите на неё.</li><li>Выберите файл <b>.kdui</b> для обновления программы.</li><li>Затем нажмите <b>Установить и перезапустить</b>.</li>",
                 info_update_revert: "Если у вас что-то не так с антивирусом, нажмите \"Вернуться к встроенной версии\" во вкладке \"О программе и обновления\".",
@@ -399,6 +510,14 @@
                 info_antivirus_warning: "<b>Важное примечание:</b> Из-за ранних версий программы антивирус может работать некорректно или иметь ошибки. Мы активно работаем над улучшениями.",
                 info_kdui_title: "KDUI Compiler",
                 info_kdui_text: "Программа использует простой интерфейс Tkinter. Она использует <span class=\"filename\">index.html</span> и <span class=\"filename\">main.py</span> из ZIP архива, а также компилирует все это в формат <b>.kdui</b> (Kfes Defender Update Image).",
+                changelog_title: "История изменений",
+                latest: "(Последняя)",
+                changelog_142_1: "Добавлен показ автора обновления в коде <b>.kdui</b>. Можно поменять имя автора, и оно будет показываться при открытии файла обновления в антивирусе.",
+                changelog_142_2: "Добавлена возможность вручную добавить файл в вкладку <b>Карантин</b> (изолировать его).",
+                changelog_142_3: "Вкладка \"Сканирование системы\" переименована в <b>\"Сканирование\"</b>. Добавлена новая кнопка <b>\"Сканирование файла\"</b>, позволяющая выбрать конкретный файл и сканировать только его.",
+                changelog_142_4: "При установке других версий с версии 1.4.2 не будет ошибки открытия процесса антивируса.",
+                changelog_142_5: "Проверка файлов стала лучше, так как теперь используется дизассемблирование файла для более точной проверки.",
+                changelog_141_1: "<b>Обновление безопасности:</b> Добавлена безопасность <b>.kdui</b> файлов. Теперь они проверяются при открытии <b>.kdui</b> файла во вкладке обновления антивируса.",
                 footer_text: "Все права защищены."
             },
             uk: {
@@ -409,6 +528,7 @@
                 req_python: "Потрібен Python (рекомендовано v3.13)",
                 req_internet: "Потрібне підключення до інтернету",
                 req_update: "Пакет оновлення для Kfes Defender",
+                prev_versions: "Попередні версії можна завантажити на <a href=\"https://github.com/brrbrrpatapimlalala/kfes-defender\" target=\"_blank\" style=\"color: var(--accent-color); text-decoration: none; font-weight: 600;\">основному джерелі проєкту</a>.",
                 btn_download: "Завантажити",
                 btn_download_update: "Завантажити оновлення",
                 badge_latest: "Остання версія",
@@ -416,9 +536,8 @@
                 info_installer_title: "Kfes Defender Installer",
                 info_installer_text: "Інсталятор використовує PyInstaller для збірки, але встановлюється, навіть якщо у вас не завантажено PyInstaller. Він сам збирає потрібні компоненти, вбудовані в інсталятор. До інсталятора входить одразу 2 програми: <b>Kfes Defender</b> та <b>KDUI Compiler</b>.",
                 info_pip_text: "Під час встановлення він використовує менеджер пакетів <b>pip</b>, який вже вбудований у Python, для завантаження та встановлення необхідних компонентів.",
-                info_update_title: "Оновлення до v1.4.1",
-                info_update_text: "Версія 1.4.1 — це остання версія. Якщо після оновлення у вас з'явилася помилка, не панікуйте. Ця помилка просто означає, що процес антивірусу не може перевідкритися автоматично. Запустіть антивірус самостійно, щоб побачити оновлену версію.",
-                info_security_text: "<b>Оновлення безпеки:</b> Додано безпеку <b>.kdui</b> файлів. Тепер вони перевіряються при відкритті <b>.kdui</b> файлу у вкладці оновлення антивірусу.",
+                info_update_title: "Оновлення до v1.4.2",
+                info_update_text: "Версія 1.4.2 — це остання версія. Якщо після оновлення у вас з'явилася помилка, не панікуйте. Ця помилка просто означає, що процес антивірусу не може перевідкритися автоматично. Запустіть антивірус самостійно, щоб побачити оновлену версію.",
                 info_how_to_install: "<b>Як встановити оновлення:</b>",
                 info_steps_list: "<li>Зайдіть в антивірус і відкрийте <b>Налаштування</b>.</li><li>В самому низу виберіть вкладку <b>Про програму та оновлення</b>.</li><li>У нижньому правому куті ви побачите кнопку <b>Відкрити файл</b>. Натисніть на неї.</li><li>Виберіть файл <b>.kdui</b> для оновлення програми.</li><li>Потім натисніть <b>Встановити та перезапустити</b>.</li>",
                 info_update_revert: "Якщо у вас щось не так з антивірусом, натисніть \"Повернутися до вбудованої версії\" у вкладці \"Про програму та оновлення\".",
@@ -427,6 +546,14 @@
                 info_antivirus_warning: "<b>Важлива примітка:</b> Через ранні версії програми антивірус може працювати некоректно або мати помилки. Ми активно працюємо над покращеннями.",
                 info_kdui_title: "KDUI Compiler",
                 info_kdui_text: "Програма використовує простий інтерфейс Tkinter. Вона використовує <span class=\"filename\">index.html</span> та <span class=\"filename\">main.py</span> з ZIP архіву, а також компілює все це у формат <b>.kdui</b> (Kfes Defender Update Image).",
+                changelog_title: "Історія змін",
+                latest: "(Остання)",
+                changelog_142_1: "Додано показ автора оновлення в коді <b>.kdui</b>. Можна змінити ім'я автора, і воно буде показуватися при відкритті файлу оновлення в антивірусі.",
+                changelog_142_2: "Додано можливість вручну додати файл у вкладку <b>Карантин</b> (ізолювати його).",
+                changelog_142_3: "Вкладку \"Сканування системи\" перейменовано на <b>\"Сканування\"</b>. Додано нову кнопку <b>\"Сканування файлу\"</b>, що дозволяє вибрати конкретний файл і сканувати лише його.",
+                changelog_142_4: "При встановленні інших версій з версії 1.4.2 не буде помилки відкриття процесу антивірусу.",
+                changelog_142_5: "Перевірка файлів стала кращою, оскільки тепер використовується дизасемблювання файлу для точнішої перевірки.",
+                changelog_141_1: "<b>Оновлення безпеки:</b> Додано безпеку <b>.kdui</b> файлів. Тепер вони перевіряються при відкритті <b>.kdui</b> файлу у вкладці оновлення антивірусу.",
                 footer_text: "Усі права захищені."
             },
             de: {
@@ -437,6 +564,7 @@
                 req_python: "Benötigt Python (Empfohlen v3.13)",
                 req_internet: "Internetverbindung erforderlich",
                 req_update: "Update-Paket für Kfes Defender",
+                prev_versions: "Frühere Versionen können von der <a href=\"https://github.com/brrbrrpatapimlalala/kfes-defender\" target=\"_blank\" style=\"color: var(--accent-color); text-decoration: none; font-weight: 600;\">Hauptprojektquelle</a> heruntergeladen werden.",
                 btn_download: "Herunterladen",
                 btn_download_update: "Update herunterladen",
                 badge_latest: "Neueste Version",
@@ -444,9 +572,8 @@
                 info_installer_title: "Kfes Defender Installer",
                 info_installer_text: "Der Installer verwendet PyInstaller zum Erstellen. Er installiert jedoch auch, wenn PyInstaller nicht heruntergeladen wurde. Er stellt die erforderlichen Komponenten automatisch zusammen. Der Installer enthält 2 Programme: <b>Kfes Defender</b> und <b>KDUI Compiler</b>.",
                 info_pip_text: "Während der Installation verwendet er den Paketmanager <b>pip</b>, der bereits in Python integriert ist, um die erforderlichen Komponenten herunterzuladen und zu installieren.",
-                info_update_title: "Update auf v1.4.1",
-                info_update_text: "Version 1.4.1 ist die neueste Version. Wenn nach dem Update ein Fehler auftritt, geraten Sie nicht in Panik. Dieser Fehler bedeutet lediglich, dass der Antivirenprozess nicht automatisch neu gestartet werden konnte. Starten Sie das Antivirenprogramm einfach manuell, um die aktualisierte Version zu sehen.",
-                info_security_text: "<b>Sicherheitsupdate:</b> Sicherheit für <b>.kdui</b>-Dateien hinzugefügt. Sie werden jetzt beim Öffnen einer <b>.kdui</b>-Datei im Antivirus-Update-Tab überprüft.",
+                info_update_title: "Update auf v1.4.2",
+                info_update_text: "Version 1.4.2 ist die neueste Version. Wenn nach dem Update ein Fehler auftritt, geraten Sie nicht in Panik. Dieser Fehler bedeutet lediglich, dass der Antivirenprozess nicht automatisch neu gestartet werden konnte. Starten Sie das Antivirenprogramm einfach manuell, um die aktualisierte Version zu sehen.",
                 info_how_to_install: "<b>So installieren Sie das Update:</b>",
                 info_steps_list: "<li>Öffnen Sie das Antivirenprogramm und gehen Sie zu <b>Einstellungen</b>.</li><li>Wählen Sie ganz unten die Registerkarte <b>Über & Updates</b>.</li><li>In der unteren rechten Ecke sehen Sie die Schaltfläche <b>Datei öffnen</b>. Klicken Sie darauf.</li><li>Wählen Sie die <b>.kdui</b>-Datei aus, um das Programm zu aktualisieren.</li><li>Klicken Sie dann auf <b>Installieren und neu starten</b>.</li>",
                 info_update_revert: "Wenn mit dem Antivirenprogramm etwas nicht stimmt, klicken Sie auf \"Zur integrierten Version zurückkehren\" in der Registerkarte \"Über & Updates\".",
@@ -455,6 +582,14 @@
                 info_antivirus_warning: "<b>Wichtiger Hinweis:</b> Aufgrund der frühen Versionen des Programms kann das Antivirenprogramm fehlerhaft arbeiten oder Fehler aufweisen. Wir arbeiten aktiv an Verbesserungen.",
                 info_kdui_title: "KDUI Compiler",
                 info_kdui_text: "Dieses Programm verwendet eine einfache Tkinter-Oberfläche. Es verwendet <span class=\"filename\">index.html</span> und <span class=\"filename\">main.py</span> aus einem ZIP-Archiv und kompiliert alles in das <b>.kdui</b>-Format (Kfes Defender Update Image).",
+                changelog_title: "Änderungsprotokoll",
+                latest: "(Neueste)",
+                changelog_142_1: "Anzeige des Update-Autors im <b>.kdui</b>-Code hinzugefügt. Sie können den Namen des Autors ändern, und er wird beim Öffnen der Update-Datei im Antivirenprogramm angezeigt.",
+                changelog_142_2: "Die Möglichkeit hinzugefügt, eine Datei manuell zur Registerkarte <b>Quarantäne</b> hinzuzufügen (sie zu isolieren).",
+                changelog_142_3: "Die Registerkarte \"Systemscan\" wurde in <b>\"Scan\"</b> umbenannt. Eine neue Schaltfläche <b>\"Datei scannen\"</b> wurde hinzugefügt, mit der Sie eine bestimmte Datei auswählen und nur diese scannen können.",
+                changelog_142_4: "Bei der Installation anderer Versionen ab Version 1.4.2 tritt kein Fehler beim Öffnen des Antivirenprozesses auf.",
+                changelog_142_5: "Die Dateiprüfung wurde verbessert. Zur genaueren Erkennung wird nun die Disassemblierung der Datei verwendet.",
+                changelog_141_1: "<b>Sicherheitsupdate:</b> Sicherheit für <b>.kdui</b>-Dateien hinzugefügt. Sie werden jetzt beim Öffnen einer <b>.kdui</b>-Datei im Antivirus-Update-Tab überprüft.",
                 footer_text: "Alle Rechte vorbehalten."
             },
             kk: {
@@ -465,6 +600,7 @@
                 req_python: "Python қажет (v3.13 ұсынылады)",
                 req_internet: "Интернет қосылымы қажет",
                 req_update: "Kfes Defender үшін жаңарту пакеті",
+                prev_versions: "Алдыңғы нұсқаларды <a href=\"https://github.com/brrbrrpatapimlalala/kfes-defender\" target=\"_blank\" style=\"color: var(--accent-color); text-decoration: none; font-weight: 600;\">жобаның негізгі көзінен</a> жүктеуге болады.",
                 btn_download: "Жүктеу",
                 btn_download_update: "Жаңартуды жүктеу",
                 badge_latest: "Соңғы нұсқа",
@@ -472,9 +608,8 @@
                 info_installer_title: "Kfes Defender Installer",
                 info_installer_text: "Орнатушы жинақтау үшін PyInstaller пайдаланады, бірақ PyInstaller жүктелмеген болса да орнатады. Ол орнатушыға кіріктірілген қажетті компоненттерді өзі жинайды. Орнатушыға бірден 2 бағдарлама кіреді: <b>Kfes Defender</b> және <b>KDUI Compiler</b>.",
                 info_pip_text: "Орнату кезінде ол Python-ға кіріктірілген <b>pip</b> пакет менеджерін қажетті компоненттерді жүктеу және орнату үшін пайдаланады.",
-                info_update_title: "v1.4.1 нұсқасына жаңарту",
-                info_update_text: "1.4.1 нұсқасы — бұл соңғы нұсқа. Жаңартқаннан кейін қате пайда болса, үрейленбеңіз. Бұл қате антивирус процесінің автоматты түрде қайта ашылмағанын білдіреді. Жаңартылған нұсқаны көру үшін антивирусты өзіңіз қосыңыз.",
-                info_security_text: "<b>Қауіпсіздік жаңартуы:</b> <b>.kdui</b> файлдарының қауіпсіздігі қосылды. Енді олар антивирусты жаңарту қойындысында <b>.kdui</b> файлын ашқан кезде тексеріледі.",
+                info_update_title: "v1.4.2 нұсқасына жаңарту",
+                info_update_text: "1.4.2 нұсқасы — бұл соңғы нұсқа. Жаңартқаннан кейін қате пайда болса, үрейленбеңіз. Бұл қате антивирус процесінің автоматты түрде қайта ашылмағанын білдіреді. Жаңартылған нұсқаны көру үшін антивирусты өзіңіз қосыңыз.",
                 info_how_to_install: "<b>Жаңартуды қалай орнатуға болады:</b>",
                 info_steps_list: "<li>Антивирусты ашып, <b>Параметрлер</b> бөліміне өтіңіз.</li><li>Ең төменде <b>Бағдарлама және жаңартулар туралы</b> қойындысын таңдаңыз.</li><li>Төменгі оң жақ бұрышта <b>Файлды ашу</b> түймесін көресіз. Оны басыңыз.</li><li>Бағдарламаны жаңарту үшін <b>.kdui</b> файлын таңдаңыз.</li><li>Содан кейін <b>Орнату және қайта іске қосу</b> түймесін басыңыз.</li>",
                 info_update_revert: "Егер антивируспен бірдеңе дұрыс болмаса, \"Бағдарлама және жаңартулар туралы\" қойындысындағы \"Кіріктірілген нұсқаға оралу\" түймесін басыңыз.",
@@ -483,6 +618,14 @@
                 info_antivirus_warning: "<b>Маңызды ескерту:</b> Бағдарламаның алғашқы нұсқаларына байланысты антивирус дұрыс жұмыс істемеуі немесе қателер болуы мүмкін. Біз жақсартулар бойынша белсенді жұмыс істеп жатырмыз.",
                 info_kdui_title: "KDUI Compiler",
                 info_kdui_text: "Бағдарлама қарапайым Tkinter интерфейсін пайдаланады. Ол ZIP мұрағатындағы <span class=\"filename\">index.html</span> және <span class=\"filename\">main.py</span> файлдарын пайдаланып, барлығын <b>.kdui</b> форматына (Kfes Defender Update Image) компиляциялайды.",
+                changelog_title: "Өзгерістер журналы",
+                latest: "(Соңғы)",
+                changelog_142_1: "<b>.kdui</b> кодында жаңарту авторын көрсету қосылды. Автордың атын өзгертуге болады және ол антивируста жаңарту файлын ашқан кезде көрсетіледі.",
+                changelog_142_2: "<b>Карантин</b> қойындысына файлды қолмен қосу (оқшаулау) мүмкіндігі қосылды.",
+                changelog_142_3: "\"Жүйені сканерлеу\" қойындысы <b>\"Сканерлеу\"</b> деп өзгертілді. Жаңа <b>\"Файлды сканерлеу\"</b> түймесі қосылды, ол нақты файлды таңдап, тек оны сканерлеуге мүмкіндік береді.",
+                changelog_142_4: "1.4.2 нұсқасынан басқа нұсқаларды орнатқан кезде антивирус процесін ашу қатесі болмайды.",
+                changelog_142_5: "Файлдарды тексеру жақсартылды. Енді дәлірек тексеру үшін файлды дизассемблерлеу қолданылады.",
+                changelog_141_1: "<b>Қауіпсіздік жаңартуы:</b> <b>.kdui</b> файлдарының қауіпсіздігі қосылды. Енді олар антивирусты жаңарту қойындысында <b>.kdui</b> файлын ашқан кезде тексеріледі.",
                 footer_text: "Барлық құқықтар қорғалған."
             }
         };
